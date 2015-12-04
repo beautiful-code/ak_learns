@@ -1,0 +1,7 @@
+# A sample Gemfile
+source "https://rubygems.org" do
+  gem 'httparty'
+  gem 'nokogiri'
+end
+
+# gem "rails"
