@@ -6,49 +6,49 @@ class SearchResults
   include Watir
   require 'open-uri'
   attr_reader :doc,:html
-  $base_url = "https://www.google.com"
+  BASE_URL = "https://www.google.com"
+
+  attr_accessor :results
+
   def initialize query
     query = query.tr(" ","+")
-    url = $base_url + "/#q=" + query.to_s
-    $browser = Watir::Browser.new(:chrome)
-    $browser.goto url
+    url = SearchResults::BASE_URL + "/#q=" + query.to_s
+    browser = Watir::Browser.new(:chrome)
+    browser.goto url
     sleep(10)
-    html = $browser.html
-    $doc = Nokogiri::HTML(html)
+    html = browser.html
+    doc = Nokogiri::HTML(html)
+
+    @results = Array.new
+    doc.css('.srg .g .rc').each do |single_result|
+      @results << SearchResult.new( {:title => single_result.css('a').text, :desc => single_result.css('cite').text, :url => single_result.css('span').text })
+    end
+    browser.close
   end
+
   def size
-    return $doc.css('.srg .g .rc').count
+    return @results.count
   end
-  def results sr
-    return sr.results
-  end
-  def close
-    $browser.close
-  end
+
 end
 
 class SearchResult
-  def results
-    arr = $doc.css('.srg .g .rc')
-    results = Array.new(arr.count)
-    for i in 0...arr.count do
-      a = Hash.new
-      a[:title] = arr[i].css('a').text
-      a[:url] = arr[i].css('cite').text
-      a[:desc] = arr[i].css('span').text
-      results[i] = a
-    end
-    return results
+  attr_accessor :title, :desc, :url
+
+  def initialize data_hash
+
+   @title = data_hash[:title]
+   @desc  = data_hash[:desc]
+   @url   = data_hash[:url]
   end
 end
 
 
 search = SearchResults.new("ruby oops")
-puts search.size
-sr = SearchResult.new
+puts "Number of results: #{search.size}"
 puts "Results of first page"
-search.results(sr).each { |x| puts "Title: #{x[:title]}"; puts "Desc: #{x[:desc]}"; puts "URL: #{ x[:url]}";}
 
-sleep(10)
-search.close
+search.results.each { |result| puts "Title: #{result.title}, Desc: #{result.desc}, URL: #{result.url}" }
+
+#search.close
 
