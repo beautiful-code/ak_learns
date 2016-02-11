@@ -1,25 +1,26 @@
 var BookShelf = {
-  books: [ { id:1, name: "aaaa", isRead: false}, { id:2, name:'bbbb', isRead: false}, { id:3, name: "ccc", isRead: true}]
-};
-function print_unread_books() {
+  books: [ { id:1, name: "aaaa", isRead: false}, { id:2, name:'bbbb', isRead: false}, { id:3, name: "ccc", isRead: true}],
+  print_unread_books :function() {
     for( var i=0; i< BookShelf.books.length;i++) {
       if(!BookShelf.books[i].isRead)
         console.log(BookShelf.books[i].name);
     }
-};
-function print_read_books() {
+},
+  print_read_books : function() {
     for( var i=0; i< BookShelf.books.length;i++) {
       if(BookShelf.books[i].isRead)
         console.log(BookShelf.books[i].name);
     }
-};
+},
 
-function mark_book_read(book_id) {
+ mark_book_read : function(book_id) {
   for( var i=0; i< BookShelf.books.length;i++) {
       if(BookShelf.books[i].id === book_id)
         BookShelf.books[i].isRead = true;
     }
+}
 };
+
 
 
 
