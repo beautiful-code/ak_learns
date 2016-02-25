@@ -25,29 +25,48 @@ var NewTodo = React.createClass({
 });
 
 var Todo = React.createClass({
-  isChecked : function() {
-    if(this.props.details.status === "complete")
-      return true;
-    else
-      return false;
+  markAsComplete : function(event) {
+    event.preventDefault();
+    console.log(this.props.key);
+    this.props.markAsComplete(this.props.keys);
   },
   render : function() {
-    return(
-     <tr>
-       <td>
-         <div className="checkbox-circle">
-           <input type="checkbox" checked = {this.isChecked} />
-          </div>
-       </td>
-       <td>{this.props.details.desc} </td>
-     </tr>
-  );
+
+    if(this.props.details.status == "complete") {
+      return(
+        <tr>
+          <td>
+            <div className="checkbox-circle">
+              <input type="checkbox" checked />
+            </div>
+          </td>
+          <td>
+            <del>{this.props.details.desc}</del> 
+          </td>
+        </tr>
+      );
+    }
+    else {
+      return(
+        <tr>
+          <td>
+            <div className="checkbox-circle">
+              <form onClick={this.markAsComplete} >
+                <input type="checkbox"  />
+              </form>
+            </div>
+          </td>
+          <td>{this.props.details.desc} </td>
+        </tr>
+      );
+
+    }
   }
 });
 
 var TodoList = React.createClass({
   renderTodo : function(key) {
-    return <Todo key={key} details={this.props.state.todos[key]} />
+    return <Todo keys={key} details={this.props.state.todos[key]} markAsComplete={this.props.markAsComplete} />
   },
   render : function() {
     return(
@@ -79,14 +98,14 @@ var App = React.createClass({
   },
   markAsComplete : function(key) {
     this.state.todos[key].status = "complete";
-    this.setState({todos : this.state.todos[key]});
+    this.setState({todos : this.state.todos});
   },
     render : function() {
     return (
       <div className="container">
         <h2>Todoist</h2>
         <NewTodo createTodo={this.createTodo} />
-        <TodoList state={this.state}/>
+        <TodoList state={this.state} markAsComplete={this.markAsComplete}/>
       </div>
     );
   }
