@@ -41,7 +41,7 @@ var Todo = React.createClass({
             </div>
           </td>
           <td>
-            <del>{this.props.details.desc}</del> 
+            <del>{this.props.details.desc}</del>
           </td>
         </tr>
       );
@@ -66,7 +66,7 @@ var Todo = React.createClass({
 
 var TodoList = React.createClass({
   renderTodo : function(key) {
-    return <Todo keys={key} details={this.props.state.todos[key]} markAsComplete={this.props.markAsComplete} />
+    return <Todo key={key} keys={key} details={this.props.state.todos[key]} markAsComplete={this.props.markAsComplete} />
   },
   render : function() {
     return(
